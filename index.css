@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.image-generator{
+    height: 40vh;
+    background: url(assets/bg\ aimage.jpeg);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.image-generator::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.5;
+    background: #121212;
+
+}
+.image-generator .content{
+    color:white;
+    padding: 0 15px;
+    max-width: 760px;
+    text-align: center;
+    position: relative;
+
+}
+.image-generator h1{
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+.image-generator p{
+    font-size: 1.35rem;
+    margin-top: 10px;
+}
+.image-generator .generate-form{
+    height: 56px;
+    width: 100%;
+    background: #fff;
+    border-radius: 30px;
+    padding: 6px;
+    margin: 45px 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+.generate-form .prompt-input{
+    height: 100%;
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0 17px;
+}
+.generate-form .controls{
+    height: 100%;
+    display: flex;
+    gap: 15px;
+}
+.generate-form .img-quantity{
+    outline: none;
+    background: none;
+    border: none;
+    font-size: 1rem;
+}
+
+.generate-form .generate-btn {
+    background-image: linear-gradient(to right, #ff6e7f 0%, #bfe9ff  51%, #ff6e7f  100%);
+    padding: 0 25px;
+    outline: none;
+    border: none;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 30px;
+    display: block;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    
+  }
+
+  .generate-form .generate-btn:hover {
+    background-position: right center; 
+    color: #fff;
+    text-decoration: none;
+    
+  } 
+  .bg{
+    background-color: #f9c5d1;
+background-image: linear-gradient(315deg, #f9c5d1 0%, #9795ef 74%);
+height: 700px;
+
+
+
+  }
+ .image-gallery{
+    display: flex;
+    gap: 15px;
+    padding: 0 15px;
+    max-width: 1250px;
+    margin: 0px auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  
+ }
+ .image-gallery .img-card{
+    width: 285px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    background: #f2f2f2;
+    margin: 45px auto;
+ }
+ .image-gallery .img-card img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+ }
+ .image-gallery .img-card.loading img{
+        width: 80px;
+        height: 80px;
+ }
+ .image-gallery .img-card .download-btn{
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: #fff;
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+ }
+ .image-gallery .img-card:not(.loading):hover .download-btn{
+    display: flex;
+ }
+ .image-gallery .img-card .download-btn img{
+    width: 14px;
+    height: 14px;
+ }
+ @media screen and (max-width: 760px) {
+    .image-generator h1{
+        font-size: 1.8rem;
+    }
+    .image-generator p{
+        font-size: 1rem;
+    }
+    .image-generator .generate-form{
+        height: 52px;
+        margin-top:30px ;
+        display: block;
+    }
+    .generate-form .controls{
+        height: 40px;
+        margin-top: 15px;
+        justify-content: flex-end;
+        align-items: center;
+
+    }
+    .generate-form .img-quantity {
+        color: #fff;
+    }
+    .generate-form .img-quantity option{
+        color: #000;
+    }
+    .generate-form .generate-btn{
+        height: 100%;
+    }
+    .image-gallery .img-card:not(.loading) .download-btn{
+        display: flex;
+     }
+     .image-gallery{
+        margin-top: 20px;
+     }
+ }
+ @media screen and (max-width: 550px){
+    .image-gallery .img-card{
+        width: 100%;
+    }
+ }
