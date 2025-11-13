@@ -2,79 +2,74 @@ const generateForm = document.querySelector(".generate-form");
 const generateBtn = generateForm.querySelector(".generate-btn");
 const imageGallery = document.querySelector(".image-gallery");
 
-// const B = typeof browser !== 'undefined' ? browser : chrome;
-// const B = _((()=>browser), (()=>self.browser))
-
-const updateImageCard = (imgDataArray) => {
-  imgDataArray.forEach((imgObject, index) => {
+// Update image cards with generated images
+const updateImageCard = (imgUrls) => {
+  imgUrls.forEach((imgUrl, index) => {
     const imgCard = imageGallery.querySelectorAll(".img-card")[index];
     const imgElement = imgCard.querySelector("img");
     const downloadBtn = imgCard.querySelector(".download-btn");
 
-    const aiGeneratedImg = `data:image/jpeg;base64,${imgObject.b64_json}`;
-    imgElement.src = aiGeneratedImg;
+    imgElement.src = imgUrl;
     imgElement.onload = () => {
       imgCard.classList.remove("loading");
-      downloadBtn.setAttribute("href", aiGeneratedImg);
-      downloadBtn.setAttribute("download", `${new Date().getTime()}.jpg`);
+
+      // Enable actual download functionality
+      fetch(imgUrl)
+        .then(res => res.blob())
+        .then(blob => {
+          const imageBlobUrl = URL.createObjectURL(blob);
+          downloadBtn.setAttribute("href", imageBlobUrl);
+          downloadBtn.setAttribute("download", `${new Date().getTime()}.jpg`);
+        });
     };
   });
 };
+
+// Generate AI images using Pollinations API
 const generateAiImages = async (userPrompt, imgQuantity) => {
-  const { data } = await response.json();
-  console.log("AI Image Data:", data);
   try {
-    // const response = await fetch("https://api.openai.com/v1/images/generations", {
-    //     method:'POST',
-    //     headers:{
-    //         "Content-Type": "application/json",
-    //         "Authorization": `Bearer ${OPENAI_API_KEY}`
+    const imgUrls = [];
 
-    //     },
-    const response = await fetch("http://localhost:5000/api/generate-image", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: userPrompt, n: imgQuantity }),
+    for (let i = 0; i < imgQuantity; i++) {
+      // Direct Pollinations endpoint (no key needed)
+      const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(userPrompt)}-${i}`;
+      imgUrls.push(imgUrl);
+    }
 
-      // body: JSON.stringify({
-      //     prompt: userPrompt,
-      //     n:parseInt(imgQuantity),
-      //     size:"512x512",
-      //     response_format: "b64_json"
-
-      // }),
-    });
-    if (!response.ok)
-      throw new Error("Failed to generate images! Please try again.");
-    const { data } = await response.json();
-
-    updateImageCard([...data]);
+    updateImageCard(imgUrls);
   } catch (error) {
-    alert(error.message);
+    alert("Error generating images. Please try again.");
   } finally {
     generateBtn.removeAttribute("disabled");
     generateBtn.innerText = "Generate";
-    isImageGenerating = false;
   }
 };
 
+// Handle form submission
 const handleFormSubmission = (e) => {
   e.preventDefault();
-  const userPrompt = e.srcElement[0].value;
-  const imgQuantity = e.srcElement[1].value;
+  const userPrompt = e.srcElement[0].value.trim();
+  const imgQuantity = parseInt(e.srcElement[1].value) || 1;
 
-  const imgCardMarkup = Array.from(
-    { length: imgQuantity },
-    () =>
-      `<div class="img-card loading ">
-    <img src="assets/loading icon.png" alt="image">
-    <a href="#" class="download-btn">
+  if (!userPrompt) return alert("Please enter a prompt!");
+
+  // Create placeholders while loading
+  const imgCardMarkup = Array.from({ length: imgQuantity }, () => `
+    <div class="img-card loading">
+      <img src="assets/loading icon.png" alt="image">
+      <a href="#" class="download-btn">
         <img src="assets/download-icon.png" alt="download icon">
-    </a>
+      </a>
     </div>`
   ).join("");
+
   imageGallery.innerHTML = imgCardMarkup;
+
+  generateBtn.setAttribute("disabled", true);
+  generateBtn.innerText = "Generating...";
+
   generateAiImages(userPrompt, imgQuantity);
 };
 
+// Listen for form submission
 generateForm.addEventListener("submit", handleFormSubmission);
